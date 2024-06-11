@@ -60,8 +60,8 @@ subprojects {
         }
 
         maven {
-            name = "Ladysnake Libs"
-            url = 'https://maven.ladysnake.org/releases'
+            name = "Ladysnake Mods"
+            url = "https://maven.ladysnake.org/releases"
         }
     }
 
