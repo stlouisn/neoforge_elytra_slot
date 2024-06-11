@@ -169,6 +169,10 @@
     {
       "id": "lolenderite:enderite_plated_elytra",
       "required": false
+    },
+    {
+      "id": "mythicmetals:celestium_elytra",
+      "required": false
     }
   ]
 }

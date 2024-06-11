@@ -48,6 +48,11 @@ public class SimpleCompatibilityProvider implements IElytraProvider {
             new ResourceLocation("minecraft:textures/entity/enderite_elytra.png"));
       }
 
+      if (isLoaded.test("mythicmetals")) {
+        ID_TO_TEXTURE.put("mythicmetals:celestium_elytra",
+            new ResourceLocation("mythicmetals:textures/models/celestium_elytra.png"));
+      }
+
       if (isLoaded.test("mekanism")) {
         ID_TO_TEXTURE.put("mekanism:hdpe_elytra",
             new ResourceLocation("mekanism:textures/entity/hdpe_elytra.png"));
