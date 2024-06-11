@@ -72,6 +72,11 @@ minecraft {
     }
 }
 
+mixin {
+    config "elytraslot-integrations.mixins.json"
+    add sourceSets.main, "${mod_id}.refmap.json"
+}
+
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 repositories {
@@ -87,11 +92,17 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
     compileOnly "curse.maven:mccapes-359836:${mccapes_cf_file_id}"
+    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.6"))
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
     runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
     compileOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}:api")
+
+    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.2-beta.6")) {
+        jarJar.ranged(it, "(0.0,0.1.2-beta.6]")
+    }
 }
 
 tasks.withType(JavaCompile) {
@@ -114,9 +125,30 @@ processResources {
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${mod_id}."
+    }
 }
 
 jar.finalizedBy('reobfJar')
+
+reobf {
+    jarJar {}
+}
+
+tasks.jarJar.configure {
+    archiveClassifier.set("")
+    from(rootProject.file("LICENSE"))
+    from(rootProject.file("COPYING"))
+    from(rootProject.file("COPYING.LESSER"))
+    from(rootProject.file("README.md"))
+    from(rootProject.file("CHANGELOG.md"))
+}
+
+jarJar {
+    enable()
+}
 
 publishing {
     publications {
