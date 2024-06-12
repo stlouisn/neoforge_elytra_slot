@@ -18,26 +18,21 @@
 package com.illusivesoulworks.elytraslot;
 
 import com.illusivesoulworks.elytraslot.common.CurioElytra;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.caelus.api.CaelusApi;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.type.capability.ICurio;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 @Mod(ElytraSlotConstants.MOD_ID)
 public class ElytraSlotForgeMod {
@@ -47,10 +42,21 @@ public class ElytraSlotForgeMod {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::setup);
+    eventBus.addListener(this::registerCapabilities);
+  }
+
+  private void registerCapabilities(final RegisterCapabilitiesEvent event) {
+    ICurioItem curio = new CurioElytra();
+
+    for (Item item : ForgeRegistries.ITEMS.getValues()) {
+
+      if (ElytraSlotCommonMod.IS_ELYTRA.test(item.getDefaultInstance())) {
+        CuriosApi.registerCurio(item, curio);
+      }
+    }
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
-    MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, this::attachCapabilities);
     MinecraftForge.EVENT_BUS.addListener(this::playerTick);
   }
 
@@ -64,30 +70,12 @@ public class ElytraSlotForgeMod {
         player.getAttribute(CaelusApi.getInstance().getFlightAttribute());
 
     if (attributeInstance != null) {
-      attributeInstance.removeModifier(CurioElytra.ELYTRA_CURIO_MODIFIER.getId());
+      attributeInstance.removeModifier(CurioElytra.ELYTRA_CURIO_MODIFIER.id());
 
       if (!attributeInstance.hasModifier(CurioElytra.ELYTRA_CURIO_MODIFIER) &&
           ElytraSlotCommonMod.canFly(player)) {
         attributeInstance.addTransientModifier(CurioElytra.ELYTRA_CURIO_MODIFIER);
       }
-    }
-  }
-
-  private void attachCapabilities(final AttachCapabilitiesEvent<ItemStack> evt) {
-    ItemStack stack = evt.getObject();
-
-    if (ElytraSlotCommonMod.IS_ELYTRA.test(stack)) {
-      final LazyOptional<ICurio> elytraCurio = LazyOptional.of(() -> new CurioElytra(stack));
-      evt.addCapability(CuriosCapability.ID_ITEM, new ICapabilityProvider() {
-
-        @Nonnull
-        @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap,
-                                                 @Nullable Direction side) {
-          return CuriosCapability.ITEM.orEmpty(cap, elytraCurio);
-        }
-      });
-      evt.addListener(elytraCurio::invalidate);
     }
   }
 }

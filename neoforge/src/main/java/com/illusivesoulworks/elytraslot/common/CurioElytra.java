@@ -30,7 +30,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 public class CurioElytra implements ICurio {
   public static final AttributeModifier ELYTRA_CURIO_MODIFIER =
       new AttributeModifier(UUID.fromString("c754faef-9926-4a77-abbe-e34ef0d735aa"),
-          "Elytra curio modifier", 1.0D, AttributeModifier.Operation.ADDITION);
+          "Elytra curio modifier", 1.0D, AttributeModifier.Operation.ADD_VALUE);
 
   private final ItemStack stack;
 
@@ -61,7 +61,7 @@ public class CurioElytra implements ICurio {
   @Nonnull
   @Override
   public SoundInfo getEquipSound(SlotContext slotContext) {
-    return new SoundInfo(SoundEvents.ARMOR_EQUIP_ELYTRA, 1.0F, 1.0F);
+    return new SoundInfo(SoundEvents.ARMOR_EQUIP_ELYTRA.value(), 1.0F, 1.0F);
   }
 
   @Override

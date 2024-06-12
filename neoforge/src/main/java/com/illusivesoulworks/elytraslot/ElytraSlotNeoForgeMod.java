@@ -28,7 +28,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import top.theillusivec4.caelus.api.CaelusApi;
 import top.theillusivec4.curios.api.CuriosCapability;
 
@@ -50,13 +50,13 @@ public class ElytraSlotNeoForgeMod {
     ElytraSlotNeoForgeClientMod.setup();
   }
 
-  private void playerTick(final TickEvent.PlayerTickEvent evt) {
-    Player player = evt.player;
+  private void playerTick(final PlayerTickEvent.Post evt) {
+    Player player = evt.getEntity();
     AttributeInstance attributeInstance =
         player.getAttribute(CaelusApi.getInstance().getFlightAttribute());
 
     if (attributeInstance != null) {
-      attributeInstance.removeModifier(CurioElytra.ELYTRA_CURIO_MODIFIER.getId());
+      attributeInstance.removeModifier(CurioElytra.ELYTRA_CURIO_MODIFIER.id());
 
       if (!attributeInstance.hasModifier(CurioElytra.ELYTRA_CURIO_MODIFIER) &&
           ElytraSlotCommonMod.canFly(player)) {

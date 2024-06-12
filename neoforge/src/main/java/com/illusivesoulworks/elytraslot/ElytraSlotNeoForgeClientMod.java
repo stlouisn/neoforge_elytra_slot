@@ -54,8 +54,6 @@ public class ElytraSlotNeoForgeClientMod {
 
     if (renderer instanceof LivingEntityRenderer livingRenderer) {
       livingRenderer.addLayer(new ElytraSlotLayer(livingRenderer, evt.getEntityModels()));
-      livingRenderer.addLayer(
-          new ElytraSlotArmorLayer(livingRenderer, evt.getEntityModels(), slim));
     }
   }
 
@@ -65,7 +63,6 @@ public class ElytraSlotNeoForgeClientMod {
 
     if (renderer != null) {
       renderer.addLayer(new ElytraSlotLayer<>(renderer, evt.getEntityModels()));
-      renderer.addLayer(new ElytraSlotArmorLayer<>(renderer, evt.getEntityModels(), false));
     }
   }
 

@@ -1,74 +1,60 @@
 plugins {
-    id 'idea'
-    id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'multiloader-loader'
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
     id 'com.modrinth.minotaur' version '2.+'
     id 'net.darkhax.curseforgegradle' version '1.+'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
-base {
-    archivesName = "${mod_id}-forge"
-}
-mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
 
+mixin {
     config("elytraslot-integrations.mixins.json")
     config("elytraslot-forge-integrations.mixins.json")
 }
 
 minecraft {
-    mappings channel: 'parchment', version: "${parchment_mc_version}-${parchment_version}-${minecraft_version}"
-
-    copyIdeResources = true //Calls processResources when in dev
+    mappings channel: "official", version: "${minecraft_version}"
+    reobf = false
+    copyIdeResources = true
 
     // Automatically enable forge AccessTransformers if the file exists
     // This location is hardcoded in Forge and can not be changed.
     // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformer = at
     }
 
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory file('runs/client')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
                 modClientRun {
                     source sourceSets.main
-                    source project(":common").sourceSets.main
                 }
             }
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory file('runs/server')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Server'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
                 modServerRun {
                     source sourceSets.main
-                    source project(":common").sourceSets.main
                 }
             }
         }
 
         data {
-            workingDirectory project.file('run')
+            workingDirectory file('runs/data')
             ideaModule "${rootProject.name}.${project.name}.main"
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             taskName 'Data'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
                 modDataRun {
                     source sourceSets.main
-                    source project(":common").sourceSets.main
                 }
             }
         }
@@ -79,40 +65,35 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compileOnly project(":common")
     compileOnly "curse.maven:mccapes-359836:${mccapes_cf_file_id}"
     implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.6"))
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    implementation "top.theillusivec4.curios:curios-forge:${curios_version}"
 
-    runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
-    compileOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}:api")
+    runtimeOnly "top.theillusivec4.caelus:caelus-forge:${caelus_version}"
+    compileOnly "top.theillusivec4.caelus:caelus-forge:${caelus_version}:api"
 
     implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.2-beta.6")) {
         jarJar.ranged(it, "(0.0,0.1.2-beta.6]")
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-tasks.withType(Javadoc).configureEach {
-    source(project(":common").sourceSets.main.allJava)
-}
-tasks.named("sourcesJar", Jar) {
-    from(project(":common").sourceSets.main.allSource)
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
 }
 
-processResources {
-    from project(":common").sourceSets.main.resources
+jar {
+    manifest {
+        attributes([
+                "MixinConfigs": "${mod_id}-forge-integrations.mixins.json,${mod_id}-integrations.mixins.json"
+        ])
+    }
 }
 
-jar.finalizedBy('reobfJar')
-
-reobf {
-    jarJar {}
-}
+jar.finalizedBy('jarJar')
 
 tasks.jarJar.configure {
     archiveClassifier.set("")
@@ -121,25 +102,6 @@ tasks.jarJar.configure {
     from(rootProject.file("COPYING.LESSER"))
     from(rootProject.file("README.md"))
     from(rootProject.file("CHANGELOG.md"))
-}
-
-jarJar {
-    enable()
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-            fg.component(it)
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
 }
 
 task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
@@ -162,6 +124,8 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
             project.ext.curse_link = "${cf_page}/files/${mainFile.curseFileId}"
         }
     }
+
+    dependsOn('jarJar')
 }
 
 modrinth {
@@ -186,8 +150,4 @@ tasks.modrinth.doLast {
     }
 }
 
-sourceSets.each {
-    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
-    it.output.resourcesDir = dir
-    it.java.destinationDirectory = dir
-}
+tasks.modrinth.dependsOn('jarJar')
