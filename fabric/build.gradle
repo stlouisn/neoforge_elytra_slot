@@ -90,6 +90,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
         mainFile.addGameVersion("${it}")
     }
     mainFile.addRequirement("fabric-api")
+    mainFile.addRequirement("trinkets")
     mainFile.withAdditionalFile(sourcesJar)
 
     doLast {
@@ -110,7 +111,8 @@ modrinth {
     additionalFiles = [sourcesJar]
     gameVersions = "${release_versions}".split(",") as List<String>
     dependencies {
-        required.project "fabric-api"
+        required.project 'fabric-api'
+        required.project 'trinkets'
     }
 }
 
