@@ -27,7 +27,7 @@ public interface IElytraPlatform {
 
   ItemStack getEquipped(LivingEntity livingEntity);
 
-  boolean canFly(ItemStack stack, LivingEntity livingEntity, boolean doTick);
+  boolean canFly(ItemStack stack, LivingEntity livingEntity);
 
   void processSlots(LivingEntity livingEntity, BiFunction<ItemStack, Boolean, Boolean> processor);
 }

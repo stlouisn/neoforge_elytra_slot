@@ -31,17 +31,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.caelus.api.CaelusApi;
-import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 @Mod(ElytraSlotConstants.MOD_ID)
@@ -72,7 +67,7 @@ public class ElytraSlotForgeMod {
       attributeInstance.removeModifier(CurioElytra.ELYTRA_CURIO_MODIFIER);
 
       if (!attributeInstance.hasModifier(CurioElytra.ELYTRA_CURIO_MODIFIER) &&
-          ElytraSlotCommonMod.canFly(player, false)) {
+          ElytraSlotCommonMod.canFly(player)) {
         attributeInstance.addTransientModifier(CurioElytra.ELYTRA_CURIO_MODIFIER);
       }
     }

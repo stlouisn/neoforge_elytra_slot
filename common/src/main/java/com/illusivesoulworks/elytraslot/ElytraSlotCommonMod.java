@@ -74,7 +74,7 @@ public class ElytraSlotCommonMod {
     return Optional.ofNullable(result.get());
   }
 
-  public static boolean canFly(final LivingEntity livingEntity, boolean doTick) {
+  public static boolean canFly(final LivingEntity livingEntity) {
     AtomicBoolean result = new AtomicBoolean();
     Services.ELYTRA.processSlots(livingEntity, (stack, render) -> {
 
@@ -83,7 +83,7 @@ public class ElytraSlotCommonMod {
         for (IElytraProvider provider : PROVIDERS) {
 
           if (provider.matches(stack)) {
-            result.set(provider.canFly(stack, livingEntity, doTick));
+            result.set(provider.canFly(stack, livingEntity));
             return true;
           }
         }

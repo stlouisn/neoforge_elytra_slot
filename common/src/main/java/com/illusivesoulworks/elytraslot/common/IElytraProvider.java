@@ -36,8 +36,8 @@ public interface IElytraProvider {
         hasCapeTexture(stack));
   }
 
-  default boolean canFly(ItemStack stack, LivingEntity livingEntity, boolean doTick) {
-    return Services.ELYTRA.canFly(stack, livingEntity, doTick);
+  default boolean canFly(ItemStack stack, LivingEntity livingEntity) {
+    return Services.ELYTRA.canFly(stack, livingEntity);
   }
 
   default boolean hasCapeTexture(ItemStack stack) {

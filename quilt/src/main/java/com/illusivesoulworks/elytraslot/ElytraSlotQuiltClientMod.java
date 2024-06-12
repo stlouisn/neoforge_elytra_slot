@@ -18,8 +18,11 @@
 package com.illusivesoulworks.elytraslot;
 
 import com.illusivesoulworks.elytraslot.client.ElytraSlotLayer;
+import com.illusivesoulworks.elytraslot.common.integration.deeperdarker.DeeperDarkerClientModule;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRenderEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
@@ -32,5 +35,9 @@ public class ElytraSlotQuiltClientMod implements ClientModInitializer {
     LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
         (entityType, entityRenderer, registrationHelper, context) -> registrationHelper.register(
             new ElytraSlotLayer<>(entityRenderer, context.getModelSet())));
+
+    if (FabricLoader.getInstance().isModLoaded("deeperdarker")) {
+      HudRenderCallback.EVENT.register(DeeperDarkerClientModule::registerHudCallback);
+    }
   }
 }

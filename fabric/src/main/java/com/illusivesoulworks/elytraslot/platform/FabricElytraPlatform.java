@@ -53,13 +53,13 @@ public class FabricElytraPlatform implements IElytraPlatform {
   }
 
   @Override
-  public boolean canFly(ItemStack stack, LivingEntity livingEntity, boolean doTick) {
+  public boolean canFly(ItemStack stack, LivingEntity livingEntity) {
     Item item = stack.getItem();
 
-    if (item instanceof ElytraItem) {
+    if (item instanceof FabricElytraItem fabricElytraItem) {
+      return fabricElytraItem.useCustomElytra(livingEntity, stack, false);
+    } else if (item instanceof ElytraItem) {
       return ElytraItem.isFlyEnabled(stack);
-    } else if (item instanceof FabricElytraItem fabricElytraItem) {
-      return fabricElytraItem.useCustomElytra(livingEntity, stack, doTick);
     }
     return false;
   }
