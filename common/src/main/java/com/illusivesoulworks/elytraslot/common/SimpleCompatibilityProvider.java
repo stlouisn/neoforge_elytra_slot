@@ -17,7 +17,6 @@
 
 package com.illusivesoulworks.elytraslot.common;
 
-import com.illusivesoulworks.elytraslot.ElytraSlotConstants;
 import com.illusivesoulworks.elytraslot.client.ElytraRenderResult;
 import com.illusivesoulworks.elytraslot.platform.Services;
 import java.util.HashMap;
@@ -82,6 +81,13 @@ public class SimpleCompatibilityProvider implements IElytraProvider {
             new ResourceLocation("netherelytra:textures/entity/netherite_elytra.png"));
       }
 
+      if (isLoaded.test("crystalmod")) {
+        ID_TO_TEXTURE.put("crystalmod:sapphire_elytra",
+            new ResourceLocation("crystalmod:textures/entity/sapphire_elytra.png"));
+        ID_TO_TEXTURE.put("crystalmod:black_tourmaline_elytra",
+            new ResourceLocation("crystalmod:textures/entity/black_tourmaline_elytra.png"));
+      }
+
       if (isLoaded.test("lilwings")) {
         Set<ResourceLocation> entityTypes = Services.PLATFORM.getEntityTypes();
 
@@ -93,35 +99,6 @@ public class SimpleCompatibilityProvider implements IElytraProvider {
             ID_TO_TEXTURE.put("lilwings:" + name,
                 new ResourceLocation("lilwings", "textures/elytra/" + name + ".png"));
           }
-        }
-      }
-
-      if (isLoaded.test("clutter")) {
-        String[] clutterElytras = {
-          "white_butterfly_elytra",
-          "light_gray_butterfly_elytra",
-          "gray_butterfly_elytra",
-          "black_butterfly_elytra",
-          "brown_butterfly_elytra",
-          "red_butterfly_elytra",
-          "orange_butterfly_elytra",
-          "yellow_butterfly_elytra",
-          "lime_butterfly_elytra",
-          "green_butterfly_elytra",
-          "cyan_butterfly_elytra",
-          "light_blue_butterfly_elytra",
-          "blue_butterfly_elytra",
-          "purple_butterfly_elytra",
-          "magenta_butterfly_elytra",
-          "pink_butterfly_elytra",
-          "crimson_butterfly_elytra",
-          "warped_butterfly_elytra",
-          "soul_butterfly_elytra",
-        };
-
-        for (String clutterElytra: clutterElytras) {
-          ID_TO_TEXTURE.put("clutter:" + clutterElytra,
-                  new ResourceLocation("clutter", "textures/entity/" + clutterElytra + ".png"));
         }
       }
       init = true;
@@ -146,7 +123,7 @@ public class SimpleCompatibilityProvider implements IElytraProvider {
           rl.toString().equals("deeperdarker:soul_elytra")) {
         return false;
       } else if (Services.PLATFORM.isModLoaded("lilwings") &&
-              rl.getNamespace().equals("lilwings")) {
+          rl.getNamespace().equals("lilwings")) {
         return false;
       }
     }

@@ -52,7 +52,9 @@
       "icon": "${mod_id}_icon.png"
     }
   },
-  "mixin": [],
+  "mixins": [
+    "elytraslot-integrations.mixins.json"
+  ],
   "minecraft": {
     "environment": "*"
   }

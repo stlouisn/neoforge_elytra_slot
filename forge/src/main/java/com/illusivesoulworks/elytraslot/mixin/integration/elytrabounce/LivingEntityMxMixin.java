@@ -27,7 +27,7 @@ public abstract class LivingEntityMxMixin extends Entity {
   )
   private boolean elytraslot$updateFallFlying(boolean flag) {
     LivingEntity livingEntity = (LivingEntity) (Object) this;
-    return this.getSharedFlag(7) && !livingEntity.isOnGround() && !livingEntity.isPassenger() &&
+    return this.getSharedFlag(7) && !livingEntity.onGround() && !livingEntity.isPassenger() &&
         !livingEntity.hasEffect(MobEffects.LEVITATION) &&
         CaelusApi.getInstance().canFly(livingEntity);
   }
