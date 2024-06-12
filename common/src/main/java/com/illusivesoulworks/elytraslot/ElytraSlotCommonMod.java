@@ -98,7 +98,6 @@ public class ElytraSlotCommonMod {
   }
 
   public static boolean canEquip(final LivingEntity livingEntity) {
-    return !IS_ELYTRA.test(livingEntity.getItemBySlot(EquipmentSlot.CHEST)) &&
-        !Services.ELYTRA.isEquipped(livingEntity);
+    return !IS_ELYTRA.test(livingEntity.getItemBySlot(EquipmentSlot.CHEST));
   }
 }

@@ -42,7 +42,7 @@ public class ForgeElytraPlatform implements IElytraPlatform {
   }
 
   @Override
-  public boolean canFly(ItemStack stack, LivingEntity livingEntity, boolean doTick) {
+  public boolean canFly(ItemStack stack, LivingEntity livingEntity) {
     return stack.canElytraFly(livingEntity);
   }
 
