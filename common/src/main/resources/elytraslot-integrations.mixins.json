@@ -9,5 +9,5 @@
   ],
   "plugin": "com.illusivesoulworks.elytraslot.mixin.IntegrationMixinPlugin",
   "minVersion": "0.8",
-  "refmap": "${refmap_target}refmap.json"
+  "refmap": "elytraslot.refmap.json"
 }

@@ -38,7 +38,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
+import net.neoforged.neoforge.client.ClientHooks;
 
 public class ElytraSlotArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>>
     extends RenderLayer<T, M> {
@@ -116,7 +116,7 @@ public class ElytraSlotArmorLayer<T extends LivingEntity, M extends HumanoidMode
   }
 
   private void renderModel(PoseStack pPoseStack, MultiBufferSource pBuffer, int p_117109_,
-                           boolean p_117111_, net.minecraft.client.model.Model pModel,
+                           boolean p_117111_, Model pModel,
                            float p_117114_, float p_117115_, float p_117116_,
                            ResourceLocation armorResource) {
     VertexConsumer vertexconsumer =
@@ -135,7 +135,7 @@ public class ElytraSlotArmorLayer<T extends LivingEntity, M extends HumanoidMode
   }
 
   protected Model getArmorModelHook(T entity, ItemStack itemStack, EquipmentSlot slot, A model) {
-    return ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
+    return ClientHooks.getArmorModel(entity, itemStack, slot, model);
   }
 
   public ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity,
@@ -154,7 +154,7 @@ public class ElytraSlotArmorLayer<T extends LivingEntity, M extends HumanoidMode
             texture, (usesInnerModel(slot) ? 2 : 1),
             type == null ? "" : String.format(java.util.Locale.ROOT, "_%s", type));
 
-    s1 = ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
+    s1 = ClientHooks.getArmorTexture(entity, stack, s1, slot, type);
     ResourceLocation resourcelocation = ARMOR_LOCATION_CACHE.get(s1);
 
     if (resourcelocation == null) {

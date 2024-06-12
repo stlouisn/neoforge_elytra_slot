@@ -25,18 +25,18 @@ import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import top.theillusivec4.caelus.api.RenderCapeEvent;
 
-public class ElytraSlotForgeClientMod {
+public class ElytraSlotNeoForgeClientMod {
 
   public static void setup() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-    eventBus.addListener(ElytraSlotForgeClientMod::addLayers);
-    MinecraftForge.EVENT_BUS.addListener(ElytraSlotForgeClientMod::renderCape);
+    eventBus.addListener(ElytraSlotNeoForgeClientMod::addLayers);
+    NeoForge.EVENT_BUS.addListener(ElytraSlotNeoForgeClientMod::renderCape);
   }
 
   private static void addLayers(final EntityRenderersEvent.AddLayers evt) {
@@ -49,7 +49,7 @@ public class ElytraSlotForgeClientMod {
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   private static void addPlayerLayer(EntityRenderersEvent.AddLayers evt, PlayerSkin.Model skin) {
-    EntityRenderer<? extends Player> renderer = evt.getPlayerSkin(skin);
+    EntityRenderer<? extends Player> renderer = evt.getSkin(skin);
     boolean slim = skin == PlayerSkin.Model.SLIM;
 
     if (renderer instanceof LivingEntityRenderer livingRenderer) {
@@ -61,7 +61,7 @@ public class ElytraSlotForgeClientMod {
 
   private static <T extends LivingEntity, M extends HumanoidModel<T>, R extends LivingEntityRenderer<T, M>> void addEntityLayer(
       EntityRenderersEvent.AddLayers evt, EntityType<? extends T> entityType) {
-    R renderer = evt.getEntityRenderer(entityType);
+    R renderer = evt.getRenderer(entityType);
 
     if (renderer != null) {
       renderer.addLayer(new ElytraSlotLayer<>(renderer, evt.getEntityModels()));

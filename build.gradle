@@ -1,8 +1,12 @@
 import javax.net.ssl.HttpsURLConnection
 import java.nio.charset.StandardCharsets
 
-subprojects {
+plugins {
+    // Required for NeoGradle
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+}
 
+subprojects {
     apply plugin: 'java'
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -25,9 +29,9 @@ subprojects {
                     'Implementation-Version'  : project.jar.archiveVersion,
                     'Implementation-Vendor'   : mod_author,
                     'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    'Timestampe'              : System.currentTimeMillis(),
+                    'Timestamp'               : System.currentTimeMillis(),
                     'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                    'Build-On-Minecraft'      : minecraft_version
+                    'Built-On-Minecraft'      : minecraft_version
             ])
         }
     }
@@ -44,10 +48,13 @@ subprojects {
         mavenCentral()
         maven { url = "https://jitpack.io" }
         maven {
+            name = 'Sponge / Mixin'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+        maven {
             name = 'BlameJared Maven (CrT / Bookshelf)'
             url = 'https://maven.blamejared.com'
         }
-
         maven {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org/'
@@ -67,17 +74,58 @@ subprojects {
             name = "Ladysnake Mods"
             url = "https://maven.ladysnake.org/releases"
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url "https://cursemaven.com"
+                }
+            }
+            filter {
+                includeGroup "curse.maven"
+            }
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        it.options.release = 17
+        it.options.getRelease().set(17)
+    }
+
+    processResources {
+        def expandProps = [
+                "version"                      : version,
+                "group"                        : project.group, //Else we target the task's group.
+                "minecraft_version"            : minecraft_version,
+                "forge_version"                : forge_version,
+                "forge_loader_version_range"   : forge_loader_version_range,
+                "forge_version_range"          : forge_version_range,
+                "minecraft_version_range"      : minecraft_version_range,
+                "minecraft_version_range_alt"  : minecraft_version_range_alt,
+                "fabric_version"               : fabric_version,
+                "fabric_loader_version"        : fabric_loader_version,
+                "mod_name"                     : mod_name,
+                "mod_author"                   : mod_author,
+                "mod_id"                       : mod_id,
+                "license"                      : license,
+                "issues_url"                   : issues_url,
+                "sources_url"                  : sources_url,
+                "description"                  : project.description,
+                "neoforge_version"             : neoforge_version,
+                "neoforge_version_range"       : neoforge_version_range,
+                "curios_version_range"         : curios_version_range,
+                "caelus_version_range"         : caelus_version_range
+        ]
+
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+            expand expandProps
+        }
+        inputs.properties(expandProps)
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
-    tasks.withType(GenerateModuleMetadata) {
+    tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
 
@@ -98,8 +146,8 @@ def publishDiscord() {
             cfLinks.add("[Forge](${project(':forge').findProperty('curse_link')})")
         }
 
-        if (project(':quilt').hasProperty('curse_link')) {
-            cfLinks.add("[Quilt](${project(':quilt').findProperty('curse_link')})")
+        if (project(':neoforge').hasProperty('curse_link')) {
+            cfLinks.add("[NeoForge](${project(':neoforge').findProperty('curse_link')})")
         }
         def modrinthLinks = new StringJoiner('\\n')
 
@@ -111,8 +159,8 @@ def publishDiscord() {
             modrinthLinks.add("[Forge](${project(':forge').findProperty('modrinth_link')})")
         }
 
-        if (project(':quilt').hasProperty('curse_link')) {
-            modrinthLinks.add("[Quilt](${project(':quilt').findProperty('modrinth_link')})")
+        if (project(':neoforge').hasProperty('curse_link')) {
+            modrinthLinks.add("[NeoForge](${project(':neoforge').findProperty('modrinth_link')})")
         }
         println(cfLinks)
         println(modrinthLinks)
@@ -121,7 +169,7 @@ def publishDiscord() {
         changelog = changelog.replaceAll("\n", "\\\\n")
 
         if (changelog.length() >= 1024) {
-            changelog = changelog.substring(0, 924)
+            changelog = changelog.substring(0, changelog.length() - 100)
             changelog = changelog + "...[(See more)](${changelog_link})"
         }
         println(changelog)
@@ -166,7 +214,7 @@ def publishDiscord() {
             }
             """
         println(message)
-        final URL url = URI.create("${discordWebhook}").toURL()
+        final URL url = new URL("${discordWebhook}")
         final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection()
         connection.addRequestProperty("Content-Type", "application/json; charset=UTF-8")
         connection.addRequestProperty("User-Agent", "${mod_name} Gradle Upload")
@@ -192,8 +240,56 @@ def ordered(String... dependencyPaths) {
     return dependencies
 }
 
-tasks.register('publishFabricForgeQuilt') {
-    dependsOn ordered(':quilt:modrinth', ':quilt:publishCurseForge', ':fabric:modrinth', ':fabric:publishCurseForge', ':forge:modrinth', ':forge:publishCurseForge')
+tasks.register('publishFabric') {
+    dependsOn ordered(':fabric:modrinth', ':fabric:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishForge') {
+    dependsOn ordered(':forge:modrinth', ':forge:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishNeoForge') {
+    dependsOn ordered(':neoforge:modrinth', ':neoforge:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishFabricForge') {
+    dependsOn ordered(':forge:modrinth', 'forge:publishCurseForge', ':fabric:modrinth', ':fabric:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishForgeNeoForge') {
+    dependsOn ordered(':forge:modrinth', ':forge:publishCurseForge', ':neoforge:modrinth', ':neoforge:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishFabricNeoForge') {
+    dependsOn ordered(':fabric:modrinth', ':fabric:publishCurseForge', ':neoforge:modrinth', ':neoforge:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishFabricForgeNeoForge') {
+    dependsOn ordered(':forge:modrinth', ':forge:publishCurseForge', ':fabric:modrinth', ':fabric:publishCurseForge', ':neoforge:modrinth', ':neoforge:publishCurseForge')
 
     doLast {
         publishDiscord()

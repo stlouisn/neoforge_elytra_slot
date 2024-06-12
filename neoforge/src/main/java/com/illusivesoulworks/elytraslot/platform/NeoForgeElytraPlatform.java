@@ -28,7 +28,7 @@ import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
-public class ForgeElytraPlatform implements IElytraPlatform {
+public class NeoForgeElytraPlatform implements IElytraPlatform {
 
   @Override
   public boolean isEquipped(final LivingEntity livingEntity) {

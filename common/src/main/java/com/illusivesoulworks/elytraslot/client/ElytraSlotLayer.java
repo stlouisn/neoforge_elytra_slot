@@ -33,6 +33,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.PlayerModelPart;
@@ -59,19 +60,18 @@ public class ElytraSlotLayer<T extends LivingEntity, M extends EntityModel<T>>
       }
 
       if (livingEntity instanceof AbstractClientPlayer abstractclientplayer) {
+        PlayerSkin playerSkin = abstractclientplayer.getSkin();
 
-        if (abstractclientplayer.isElytraLoaded() &&
-            abstractclientplayer.getElytraTextureLocation() != null) {
-          resourcelocation = abstractclientplayer.getElytraTextureLocation();
+        if (playerSkin.elytraTexture() != null) {
+          resourcelocation = playerSkin.elytraTexture();
         } else if (elytra.useCapeTexture()) {
 
           if (Services.PLATFORM.isModLoaded("minecraftcapes") &&
               Services.CLIENT.hasCustomCape(abstractclientplayer)) {
             resourcelocation = Services.CLIENT.getCustomCape(abstractclientplayer);
-          } else if (abstractclientplayer.isCapeLoaded() &&
-              abstractclientplayer.getCloakTextureLocation() != null &&
+          } else if (playerSkin.capeTexture() != null &&
               abstractclientplayer.isModelPartShown(PlayerModelPart.CAPE)) {
-            resourcelocation = abstractclientplayer.getCloakTextureLocation();
+            resourcelocation = playerSkin.capeTexture();
           } else {
             resourcelocation = elytra.texture();
           }
