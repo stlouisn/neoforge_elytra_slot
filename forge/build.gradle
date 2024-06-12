@@ -180,6 +180,13 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
 	mainFile.addRequirement("curios")
 	mainFile.addRequirement("caelus")
     mainFile.withAdditionalFile(sourcesJar)
+
+    doLast {
+
+        if (project.hasProperty('cf_page') && mainFile.curseFileId != null) {
+            project.ext.curse_link = "${cf_page}/files/${mainFile.curseFileId}"
+        }
+    }
 }
 
 modrinth {
@@ -194,5 +201,12 @@ modrinth {
     dependencies {
         required.project 'curios'
         required.project 'caelus'
+    }
+}
+
+tasks.modrinth.doLast {
+
+    if (project.hasProperty('modrinth_page') && tasks.modrinth.newVersion != null) {
+        project.ext.modrinth_link = "${modrinth_page}/version/${tasks.modrinth.newVersion.id}"
     }
 }
