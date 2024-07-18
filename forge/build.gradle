@@ -71,8 +71,8 @@ dependencies {
 
     implementation "top.theillusivec4.curios:curios-forge:${curios_version}"
 
-    runtimeOnly "top.theillusivec4.caelus:caelus-forge:${caelus_version}"
-    compileOnly "top.theillusivec4.caelus:caelus-forge:${caelus_version}:api"
+    runtimeOnly "com.illusivesoulworks.caelus:caelus-forge:${caelus_version}"
+    compileOnly "com.illusivesoulworks.caelus:caelus-forge:${caelus_version}:api"
 
     implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.2-beta.6")) {
         jarJar.ranged(it, "(0.0,0.1.2-beta.6]")

@@ -2,70 +2,58 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.gradle.userdev' version '7.0.107'
+    id 'net.neoforged.moddev'
     id 'com.modrinth.minotaur' version '2.+'
     id 'net.darkhax.curseforgegradle' version '1.+'
 }
 
-// Automatically enable neoforge AccessTransformers if the file exists
-// This location is hardcoded in FML and can not be changed.
-// https://github.com/neoforged/FancyModLoader/blob/a952595eaaddd571fbc53f43847680b00894e0c1/loader/src/main/java/net/neoforged/fml/loading/moddiscovery/ModFile.java#L118
-def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-if (at.exists()) {
-    minecraft.accessTransformers.file at
-}
-runs {
-    configureEach {
-        modSource project.sourceSets.main
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.add(at.absolutePath)
     }
-    client {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-    server {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-
-    gameTestServer {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
-}
-
-subsystems {
     parchment {
-        minecraftVersion = "${parchment_mc}"
-        mappingsVersion = "${parchment_version}"
+        minecraftVersion = parchment_mc
+        mappingsVersion = parchment_version
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+        }
+        data {
+            data()
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
     }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly "curse.maven:mccapes-359836:${mccapes_cf_file_id}"
     implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.6"))
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
-    runtimeOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}"
-    compileOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}:api"
+    runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
+    compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
 
     implementation("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.1.2-beta.6")
     jarJar("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.1.2-beta.6") { version { prefer "0.1.2-beta.6" } }
-}
-
-tasks.jarJar.configure {
-    archiveClassifier.set("")
-    from(rootProject.file("LICENSE"))
-    from(rootProject.file("COPYING"))
-    from(rootProject.file("COPYING.LESSER"))
-    from(rootProject.file("README.md"))
-    from(rootProject.file("CHANGELOG.md"))
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {
