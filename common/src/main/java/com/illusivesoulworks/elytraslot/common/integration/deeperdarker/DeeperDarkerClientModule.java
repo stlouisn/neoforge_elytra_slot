@@ -2,6 +2,7 @@ package com.illusivesoulworks.elytraslot.common.integration.deeperdarker;
 
 import com.illusivesoulworks.elytraslot.platform.Services;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -18,20 +19,21 @@ public class DeeperDarkerClientModule {
 
   private static final String MOD_ID = "deeperdarker";
 
-  public static void registerHudCallback(GuiGraphics drawContext, float tickDelta) {
+  public static void registerHudCallback(GuiGraphics drawContext, DeltaTracker deltaTracker) {
     ResourceLocation texture =
-        new ResourceLocation(MOD_ID, "textures/gui/soul_elytra_overlay_large.png");
+        ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/gui/soul_elytra_overlay_large.png");
     Minecraft client = Minecraft.getInstance();
 
     if (client.player == null) {
       return;
     }
     ItemStack itemStack = Services.ELYTRA.getEquipped(client.player);
-    Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(MOD_ID, "soul_elytra"));
+    Item item =
+        BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(MOD_ID, "soul_elytra"));
 
     if (item != Items.AIR && itemStack.is(item)) {
       float f = client.player.getCooldowns()
-          .getCooldownPercent(item, Minecraft.getInstance().getFrameTime());
+          .getCooldownPercent(item, Minecraft.getInstance().getFrameTimeNs());
       drawContext.blit(texture, 5, client.getWindow().getGuiScaledHeight() - 37, 0, 0, 0, 12,
           Mth.floor(32 * f), 32, 32);
       drawContext.blit(texture, 5, client.getWindow().getGuiScaledHeight() - 37 + Mth.floor(32 * f),

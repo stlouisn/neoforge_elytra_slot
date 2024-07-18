@@ -18,8 +18,9 @@
 package com.illusivesoulworks.elytraslot.common;
 
 import com.illusivesoulworks.elytraslot.ElytraSlotCommonMod;
-import java.util.UUID;
+import com.illusivesoulworks.elytraslot.ElytraSlotConstants;
 import javax.annotation.Nonnull;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -28,9 +29,10 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 public class CurioElytra implements ICurio {
-  public static final AttributeModifier ELYTRA_CURIO_MODIFIER =
-      new AttributeModifier(UUID.fromString("c754faef-9926-4a77-abbe-e34ef0d735aa"),
-          "Elytra curio modifier", 1.0D, AttributeModifier.Operation.ADD_VALUE);
+
+  public static final AttributeModifier ELYTRA_CURIO_MODIFIER = new AttributeModifier(
+      ResourceLocation.fromNamespaceAndPath(ElytraSlotConstants.MOD_ID, "elytra"), 1.0D,
+      AttributeModifier.Operation.ADD_VALUE);
 
   private final ItemStack stack;
 

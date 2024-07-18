@@ -88,10 +88,15 @@ public class ElytraSlotLayer<T extends LivingEntity, M extends EntityModel<T>>
           netHeadYaw, headPitch);
       VertexConsumer vertexconsumer =
           ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(resourcelocation),
-              false, elytra.enchanted());
+              elytra.enchanted());
       ElytraColor color = elytra.color();
+      int alpha = (int) (color.alpha() * 255);
+      int red = (int) (color.red() * 255);
+      int green = (int) (color.green() * 255);
+      int blue = (int) (color.blue() * 255);
+      int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;
       this.elytraModel.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY,
-          color.red(), color.green(), color.blue(), color.alpha());
+          argb);
       poseStack.popPose();
     });
   }

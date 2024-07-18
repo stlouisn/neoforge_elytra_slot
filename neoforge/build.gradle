@@ -66,7 +66,7 @@ task publishCurseForge(type: TaskPublishCurseForge) {
     "${release_versions}".split(',').each {
         mainFile.addGameVersion("${it}")
     }
-    mainFile.addRequirement("curios")
+    mainFile.addRequirement("curios-continuation")
     mainFile.addRequirement("caelus")
     mainFile.withAdditionalFile(sourcesJar)
 
@@ -88,7 +88,7 @@ modrinth {
     additionalFiles = [sourcesJar]
     gameVersions = "${release_versions}".split(",") as List<String>
     dependencies {
-        required.project 'curios'
+        required.project 'curios-continuation'
         required.project 'caelus'
     }
 }

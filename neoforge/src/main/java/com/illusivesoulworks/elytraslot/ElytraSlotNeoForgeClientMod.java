@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.elytraslot;
 
+import com.illusivesoulworks.caelus.api.RenderCapeEvent;
 import com.illusivesoulworks.elytraslot.client.ElytraSlotLayer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -26,15 +27,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import top.theillusivec4.caelus.api.RenderCapeEvent;
 
 public class ElytraSlotNeoForgeClientMod {
 
-  public static void setup() {
-    IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+  public static void setup(IEventBus eventBus) {
     eventBus.addListener(ElytraSlotNeoForgeClientMod::addLayers);
     NeoForge.EVENT_BUS.addListener(ElytraSlotNeoForgeClientMod::renderCape);
   }

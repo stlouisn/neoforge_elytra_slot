@@ -24,6 +24,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
 import net.fabricmc.fabric.api.entity.event.v1.FabricElytraItem;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -55,12 +56,12 @@ public class ElytraSlotFabricMod implements ModInitializer {
       public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
         int nextRoll = entity.getFallFlyingTicks() + 1;
 
-        if (!entity.level().isClientSide() && nextRoll % 10 == 0) {
+        if (entity.level() instanceof ServerLevel serverLevel && nextRoll % 10 == 0) {
 
           if ((nextRoll / 10) % 2 == 0) {
-            stack.hurtAndBreak(1, entity.getRandom(),
+            stack.hurtAndBreak(1, serverLevel,
                 entity instanceof ServerPlayer serverPlayer ? serverPlayer : null,
-                () -> TrinketsApi.onTrinketBroken(stack, slot, entity));
+                (item) -> TrinketsApi.onTrinketBroken(stack, slot, entity));
           }
           entity.gameEvent(GameEvent.ELYTRA_GLIDE);
         }

@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.elytraslot;
 
+import com.illusivesoulworks.caelus.api.CaelusApi;
 import com.illusivesoulworks.elytraslot.common.CurioElytra;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -29,7 +30,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import top.theillusivec4.caelus.api.CaelusApi;
 import top.theillusivec4.curios.api.CuriosCapability;
 
 @Mod(ElytraSlotConstants.MOD_ID)
@@ -37,7 +37,7 @@ public class ElytraSlotNeoForgeMod {
 
   public ElytraSlotNeoForgeMod(IEventBus eventBus) {
     ElytraSlotCommonMod.init();
-    eventBus.addListener(this::clientSetup);
+    eventBus.addListener(FMLClientSetupEvent.class, (evt) -> this.clientSetup(evt, eventBus));
     eventBus.addListener(this::setup);
     eventBus.addListener(this::registerCapabilities);
   }
@@ -46,19 +46,19 @@ public class ElytraSlotNeoForgeMod {
     NeoForge.EVENT_BUS.addListener(this::playerTick);
   }
 
-  private void clientSetup(final FMLClientSetupEvent evt) {
-    ElytraSlotNeoForgeClientMod.setup();
+  private void clientSetup(final FMLClientSetupEvent evt, final IEventBus eventBus) {
+    ElytraSlotNeoForgeClientMod.setup(eventBus);
   }
 
   private void playerTick(final PlayerTickEvent.Post evt) {
     Player player = evt.getEntity();
     AttributeInstance attributeInstance =
-        player.getAttribute(CaelusApi.getInstance().getFlightAttribute());
+        player.getAttribute(CaelusApi.getInstance().getFallFlyingAttribute());
 
     if (attributeInstance != null) {
       attributeInstance.removeModifier(CurioElytra.ELYTRA_CURIO_MODIFIER.id());
 
-      if (!attributeInstance.hasModifier(CurioElytra.ELYTRA_CURIO_MODIFIER) &&
+      if (!attributeInstance.hasModifier(CurioElytra.ELYTRA_CURIO_MODIFIER.id()) &&
           ElytraSlotCommonMod.canFly(player)) {
         attributeInstance.addTransientModifier(CurioElytra.ELYTRA_CURIO_MODIFIER);
       }

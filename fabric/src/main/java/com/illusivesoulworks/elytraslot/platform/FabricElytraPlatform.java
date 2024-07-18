@@ -45,7 +45,7 @@ public class FabricElytraPlatform implements IElytraPlatform {
               trinketComponent.getEquipped(ElytraSlotCommonMod.IS_ELYTRA);
 
           if (!list.isEmpty()) {
-            return list.get(0).getB();
+            return list.getFirst().getB();
           }
           return ItemStack.EMPTY;
         })

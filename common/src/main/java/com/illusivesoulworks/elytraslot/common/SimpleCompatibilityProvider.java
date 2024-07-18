@@ -39,53 +39,53 @@ public class SimpleCompatibilityProvider implements IElytraProvider {
 
       if (isLoaded.test("deeperdarker")) {
         ID_TO_TEXTURE.put("deeperdarker:soul_elytra",
-            new ResourceLocation("deeperdarker:textures/entity/soul_elytra.png"));
+            ResourceLocation.parse("deeperdarker:textures/entity/soul_elytra.png"));
       }
 
       if (isLoaded.test("enderitemod")) {
         ID_TO_TEXTURE.put("enderitemod:enderite_elytra_seperated",
-            new ResourceLocation("minecraft:textures/entity/enderite_elytra.png"));
+            ResourceLocation.parse("minecraft:textures/entity/enderite_elytra.png"));
       }
 
       if (isLoaded.test("mythicmetals")) {
         ID_TO_TEXTURE.put("mythicmetals:celestium_elytra",
-            new ResourceLocation("mythicmetals:textures/models/celestium_elytra.png"));
+            ResourceLocation.parse("mythicmetals:textures/models/celestium_elytra.png"));
       }
 
       if (isLoaded.test("mekanism")) {
         ID_TO_TEXTURE.put("mekanism:hdpe_elytra",
-            new ResourceLocation("mekanism:textures/entity/hdpe_elytra.png"));
+            ResourceLocation.parse("mekanism:textures/entity/hdpe_elytra.png"));
       }
 
       if (isLoaded.test("alexsmobs")) {
-        ID_TO_TEXTURE.put("alexsmobs:tarantula_hawk_elytra", new ResourceLocation(""));
+        ID_TO_TEXTURE.put("alexsmobs:tarantula_hawk_elytra", ResourceLocation.parse(""));
       }
 
       if (isLoaded.test("mna")) {
         ID_TO_TEXTURE.put("mna:spectral_elytra",
-            new ResourceLocation("mna:textures/entity/elytra.png"));
+            ResourceLocation.parse("mna:textures/entity/elytra.png"));
       }
 
       if (isLoaded.test("wooden_elytra")) {
         ID_TO_TEXTURE.put("wooden_elytra:wooden_elytra",
-            new ResourceLocation("wooden_elytra:textures/entities/wooden_elytra.png"));
+            ResourceLocation.parse("wooden_elytra:textures/entities/wooden_elytra.png"));
       }
 
       if (isLoaded.test("lolenderite")) {
         ID_TO_TEXTURE.put("lolenderite:enderite_plated_elytra",
-            new ResourceLocation("lolenderite:textures/entity/enderite_plated_elytra.png"));
+            ResourceLocation.parse("lolenderite:textures/entity/enderite_plated_elytra.png"));
       }
 
       if (isLoaded.test("netherelytra")) {
         ID_TO_TEXTURE.put("netherelytra:netherite_elytra",
-            new ResourceLocation("netherelytra:textures/entity/netherite_elytra.png"));
+            ResourceLocation.parse("netherelytra:textures/entity/netherite_elytra.png"));
       }
 
       if (isLoaded.test("crystalmod")) {
         ID_TO_TEXTURE.put("crystalmod:sapphire_elytra",
-            new ResourceLocation("crystalmod:textures/entity/sapphire_elytra.png"));
+            ResourceLocation.parse("crystalmod:textures/entity/sapphire_elytra.png"));
         ID_TO_TEXTURE.put("crystalmod:black_tourmaline_elytra",
-            new ResourceLocation("crystalmod:textures/entity/black_tourmaline_elytra.png"));
+            ResourceLocation.parse("crystalmod:textures/entity/black_tourmaline_elytra.png"));
       }
 
       if (isLoaded.test("lilwings")) {
@@ -97,7 +97,8 @@ public class SimpleCompatibilityProvider implements IElytraProvider {
             String name = entityType.getPath().substring(0, entityType.getPath().lastIndexOf("_")) +
                 "_elytra";
             ID_TO_TEXTURE.put("lilwings:" + name,
-                new ResourceLocation("lilwings", "textures/elytra/" + name + ".png"));
+                ResourceLocation.fromNamespaceAndPath("lilwings",
+                    "textures/elytra/" + name + ".png"));
           }
         }
       }

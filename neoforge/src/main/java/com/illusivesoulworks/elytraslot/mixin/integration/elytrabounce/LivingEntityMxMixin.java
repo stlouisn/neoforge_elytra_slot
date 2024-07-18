@@ -1,6 +1,7 @@
 package com.illusivesoulworks.elytraslot.mixin.integration.elytrabounce;
 
 import com.bawnorton.mixinsquared.TargetHandler;
+import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -9,7 +10,6 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import top.theillusivec4.caelus.api.CaelusApi;
 
 @Mixin(value = LivingEntity.class, priority = 1500)
 public abstract class LivingEntityMxMixin extends Entity {

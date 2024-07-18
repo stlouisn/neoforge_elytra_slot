@@ -26,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IElytraProvider {
 
-  ResourceLocation TEXTURE = new ResourceLocation("minecraft:textures/entity/elytra.png");
+  ResourceLocation TEXTURE = ResourceLocation.parse("minecraft:textures/entity/elytra.png");
   ElytraColor COLOR = new ElytraColor(1.0F, 1.0F, 1.0F, 1.0F);
 
   boolean matches(ItemStack stack);
