@@ -19,6 +19,8 @@ package com.illusivesoulworks.elytraslot;
 
 import com.illusivesoulworks.caelus.api.RenderCapeEvent;
 import com.illusivesoulworks.elytraslot.client.ElytraSlotLayer;
+import com.illusivesoulworks.elytraslot.common.integration.deeperdarker.DeeperDarkerClientPlugin;
+import com.illusivesoulworks.elytraslot.platform.Services;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -35,6 +37,10 @@ public class ElytraSlotNeoForgeClientMod {
   public static void setup(IEventBus eventBus) {
     eventBus.addListener(ElytraSlotNeoForgeClientMod::addLayers);
     NeoForge.EVENT_BUS.addListener(ElytraSlotNeoForgeClientMod::renderCape);
+
+    if (Services.PLATFORM.isModLoaded("deeperdarker")) {
+      DeeperDarkerClientPlugin.setup();
+    }
   }
 
   private static void addLayers(final EntityRenderersEvent.AddLayers evt) {

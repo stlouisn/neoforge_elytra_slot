@@ -22,7 +22,7 @@ dependencies {
     }
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.1.2-beta.6")))
+    modCompileOnly "curse.maven:deeperdarker-659011:5727329"
 }
 
 loom {

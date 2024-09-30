@@ -19,6 +19,8 @@ package com.illusivesoulworks.elytraslot;
 
 import com.illusivesoulworks.caelus.api.CaelusApi;
 import com.illusivesoulworks.elytraslot.common.CurioElytra;
+import com.illusivesoulworks.elytraslot.common.integration.deeperdarker.DeeperDarkerPlugin;
+import com.illusivesoulworks.elytraslot.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +42,10 @@ public class ElytraSlotNeoForgeMod {
     eventBus.addListener(FMLClientSetupEvent.class, (evt) -> this.clientSetup(evt, eventBus));
     eventBus.addListener(this::setup);
     eventBus.addListener(this::registerCapabilities);
+
+    if (Services.PLATFORM.isModLoaded("deeperdarker")) {
+      DeeperDarkerPlugin.setup(eventBus);
+    }
   }
 
   private void setup(final FMLCommonSetupEvent evt) {

@@ -50,6 +50,8 @@ dependencies {
 
     runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
+
+    compileOnly "curse.maven:deeperdarker-659011:5698218"
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {
