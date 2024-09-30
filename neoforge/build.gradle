@@ -44,16 +44,12 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     compileOnly "curse.maven:mccapes-359836:${mccapes_cf_file_id}"
-    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.6"))
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
-
-    implementation("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.1.2-beta.6")
-    jarJar("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.1.2-beta.6") { version { prefer "0.1.2-beta.6" } }
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {
