@@ -1,0 +1,13 @@
+/ Caelus API /
+def caelus_api_file_id = "5694215" // https://www.curseforge.com/minecraft/mc-mods/caelus/files/all?gameVersionTypeId=6
+repositories { maven { url = "https://www.cursemaven.com" }}
+dependencies { modCompileOnly ( "curse.maven:caelus-308989:${caelus_api_file_id}" )}
+dependencies { modRuntimeOnly ( "curse.maven:caelus-308989:${caelus_api_file_id}" )}
+println ("\nCaelus API: CurseForge-$caelus_api_file_id")
+
+/ Adorned Curios API /
+def curios_api_file_id = "5740650" // https://www.curseforge.com/minecraft/mc-mods/adorned/files/all?gameVersionTypeId=6
+repositories { maven { url = "https://www.cursemaven.com" }}
+dependencies { modCompileOnly ( "curse.maven:adorned-1036809:${curios_api_file_id}" )}
+dependencies { modRuntimeOnly ( "curse.maven:adorned-1036809:${curios_api_file_id}" )}
+println ("\nAdorned Curios API: CurseForge-$curios_api_file_id")

@@ -1,5 +1,5 @@
 # eclipse
-bin
+eclipse
 *.launch
 .settings
 .metadata
@@ -12,13 +12,15 @@ out
 *.iws
 *.iml
 .idea/*
-!.idea/scopes
+!.idea/dictionaries
 
 # gradle
 build
 .gradle
 
-# other
-eclipse
+# architectury
+.architectury-transformer
+
+# minecraft
 run
 runs
