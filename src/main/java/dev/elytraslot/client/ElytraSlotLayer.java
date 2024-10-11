@@ -1,6 +1,6 @@
-package com.illusivesoulworks.elytraslot.client;
+package dev.elytraslot.client;
 
-import com.illusivesoulworks.elytraslot.ElytraSlotCommon;
+import dev.elytraslot.ElytraSlotCommon;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import javax.annotation.Nonnull;

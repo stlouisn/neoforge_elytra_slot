@@ -1,11 +1,9 @@
+package dev.elytraslot;
 
-
-package com.illusivesoulworks.elytraslot;
-
-import com.illusivesoulworks.elytraslot.client.ElytraRenderResult;
-import com.illusivesoulworks.elytraslot.common.IElytraProvider;
-import com.illusivesoulworks.elytraslot.common.VanillaElytraProvider;
-import com.illusivesoulworks.elytraslot.platform.Services;
+import dev.elytraslot.client.ElytraRenderResult;
+import dev.elytraslot.common.IElytraProvider;
+import dev.elytraslot.common.VanillaElytraProvider;
+import dev.elytraslot.platform.Services;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +19,7 @@ public class ElytraSlotCommon {
   public static final Predicate<ItemStack> IS_ELYTRA = new Predicate<>() {
     @Override
     public boolean test(ItemStack stack) {
-
       for (IElytraProvider provider : PROVIDERS) {
-
         if (provider.matches(stack)) {
           return true;
         }
@@ -31,7 +27,6 @@ public class ElytraSlotCommon {
       return false;
     }
   };
-
   private static final List<IElytraProvider> PROVIDERS = new LinkedList<>();
 
   public static void init() {
@@ -41,11 +36,8 @@ public class ElytraSlotCommon {
   public static Optional<ElytraRenderResult> getElytraRender(final LivingEntity livingEntity) {
     AtomicReference<ElytraRenderResult> result = new AtomicReference<>();
     Services.ELYTRA.processSlots(livingEntity, (stack, render) -> {
-
       if (!stack.isEmpty() && render) {
-
         for (IElytraProvider provider : PROVIDERS) {
-
           if (provider.matches(stack)) {
             result.set(provider.getRender(stack));
             return true;
@@ -60,11 +52,8 @@ public class ElytraSlotCommon {
   public static boolean canFly(final LivingEntity livingEntity) {
     AtomicBoolean result = new AtomicBoolean();
     Services.ELYTRA.processSlots(livingEntity, (stack, render) -> {
-
       if (!stack.isEmpty()) {
-
         for (IElytraProvider provider : PROVIDERS) {
-
           if (provider.matches(stack)) {
             result.set(provider.canFly(stack, livingEntity));
             return true;

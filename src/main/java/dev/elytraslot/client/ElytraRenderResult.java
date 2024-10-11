@@ -1,4 +1,4 @@
-package com.illusivesoulworks.elytraslot.client;
+package dev.elytraslot.client;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

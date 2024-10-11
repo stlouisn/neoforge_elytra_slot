@@ -1,7 +1,7 @@
-package com.illusivesoulworks.elytraslot.common;
+package dev.elytraslot.common;
 
-import com.illusivesoulworks.elytraslot.ElytraSlotCommon;
-import com.illusivesoulworks.elytraslot.ElytraSlotConstants;
+import dev.elytraslot.ElytraSlotCommon;
+import dev.elytraslot.ElytraSlotConstants;
 import javax.annotation.Nonnull;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;

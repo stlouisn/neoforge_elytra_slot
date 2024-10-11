@@ -1,7 +1,7 @@
-package com.illusivesoulworks.elytraslot.platform;
+package dev.elytraslot.platform;
 
-import com.illusivesoulworks.elytraslot.ElytraSlotConstants;
-import com.illusivesoulworks.elytraslot.platform.services.IElytraPlatform;
+import dev.elytraslot.ElytraSlotConstants;
+import dev.elytraslot.platform.services.IElytraPlatform;
 import java.util.ServiceLoader;
 
 public class Services {

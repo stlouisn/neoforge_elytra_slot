@@ -1,7 +1,7 @@
-package com.illusivesoulworks.elytraslot.platform;
+package dev.elytraslot.platform;
 
-import com.illusivesoulworks.elytraslot.ElytraSlotCommon;
-import com.illusivesoulworks.elytraslot.platform.services.IElytraPlatform;
+import dev.elytraslot.ElytraSlotCommon;
+import dev.elytraslot.platform.services.IElytraPlatform;
 import java.util.Map;
 import java.util.function.BiFunction;
 import net.minecraft.world.entity.LivingEntity;

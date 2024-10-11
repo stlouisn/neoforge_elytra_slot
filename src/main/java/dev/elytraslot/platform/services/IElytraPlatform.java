@@ -1,4 +1,4 @@
-package com.illusivesoulworks.elytraslot.platform.services;
+package dev.elytraslot.platform.services;
 
 import java.util.function.BiFunction;
 import net.minecraft.world.entity.LivingEntity;
